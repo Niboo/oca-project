@@ -5,6 +5,13 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited" />
         <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='company_id']"
+                position="after"
+            >
+                <field name="is_group_hr_timesheet_user" invisible="1" />
+            </xpath>
+
             <!-- Main task form action buttons -->
             <div name="button_box" position="inside">
                 <field name="show_time_control" invisible="1" />
@@ -34,17 +41,13 @@
                 expr="//field[@name='timesheet_ids']/tree//field[@name='date']"
                 position="attributes"
             >
-                <t groups="hr_timesheet.group_hr_timesheet_user">
-                    <attribute name="invisible">1</attribute>
-                </t>
+                <attribute name="attrs">{'invisible': [('parent.is_group_hr_timesheet_user', '=', True)]}</attribute>
             </xpath>
             <xpath
                 expr="//field[@name='timesheet_ids']/tree//field[@name='date']"
                 position="after"
             >
-                <t groups="hr_timesheet.group_hr_timesheet_user">
-                    <field name="date_time" string="Date" required="1" />
-                </t>
+               <field name="date_time" string="Date" required="1" attrs="{'invisible': [('parent.is_group_hr_timesheet_user', '!=', True)], 'required': [('parent.is_group_hr_timesheet_user', '=', True)]}"/>
             </xpath>
             <xpath expr="//field[@name='timesheet_ids']/tree" position="inside">
                 <field name="show_time_control" invisible="1" />
@@ -168,25 +171,25 @@
         <field name="inherit_id" ref="project.view_task_kanban" />
         <field name="arch" type="xml">
             <xpath expr="//*[hasclass('oe_kanban_bottom_left')]" position="inside">
-                <t groups="hr_timesheet.group_hr_timesheet_user">
-                    <field name="show_time_control" invisible="1" />
-                    <a
-                        name="button_start_work"
-                        attrs="{'invisible': [('show_time_control', '!=', 'start')]}"
-                        class="o_kanban_inline_block fa fa-lg fa-play-circle text-success"
-                        tabindex="-1"
-                        type="object"
-                        title="Start work"
-                    />
-                    <a
-                        name="button_end_work"
-                        attrs="{'invisible': [('show_time_control', '!=', 'stop')]}"
-                        class="o_kanban_inline_block fa fa-lg fa-stop-circle text-warning"
-                        tabindex="-1"
-                        type="object"
-                        title="Stop work"
-                    />
-                </t>
+                <field name="show_time_control" invisible="1" />
+                <a
+                    name="button_start_work"
+                    attrs="{'invisible': [('show_time_control', '!=', 'start')]}"
+                    class="o_kanban_inline_block fa fa-lg fa-play-circle text-success"
+                    tabindex="-1"
+                    type="object"
+                    title="Start work"
+                    groups="hr_timesheet.group_hr_timesheet_user"
+                />
+                <a
+                    name="button_end_work"
+                    attrs="{'invisible': [('show_time_control', '!=', 'stop')]}"
+                    class="o_kanban_inline_block fa fa-lg fa-stop-circle text-warning"
+                    tabindex="-1"
+                    type="object"
+                    title="Stop work"
+                    groups="hr_timesheet.group_hr_timesheet_user"
+                />
             </xpath>
         </field>
     </record>
