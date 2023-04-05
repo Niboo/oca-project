@@ -9,7 +9,7 @@ class ProjectTask(models.Model):
     _inherit = ["project.task", "hr.timesheet.time_control.mixin"]
 
     is_group_hr_timesheet_user = fields.Boolean(
-        compute="_compute_is_group_readonly",
+        compute="_compute_is_group_hr_timesheet_user",
     )
 
     def _compute_is_group_hr_timesheet_user(self):
